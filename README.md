@@ -1,3 +1,19 @@
+# Reproduce EGLD bug
+
+- pnpm install
+- pnpm run build-xsuite-chainsimulator 
+- pnpm run build-xsuite
+- cd xsuite && npm run test src/world/csworld.test.ts
+
+It runs only the test `CSWorld.executeTx` from the `csworld.test.ts` file, which does the following:
+- starts the chain simulator (check `xsuite/src/world/chainSimulator.ts` file, it runs the binary built and stored in `xsuite-chainsimulator/bin`)
+- creates a sender account & generates 1 block
+- creates a receiver account & generates 1 block
+- sends tx & generates up to 10 blocks to wait until it is no longer pending
+- test fails
+- if lines `44-48` from `src/world/csworld.test.ts` are uncommented, the test passes with a wallet in same shard
+
+
 <a href="https://xsuite.dev">
   <p align="center">
     <img src="./Logo.png" height="128">

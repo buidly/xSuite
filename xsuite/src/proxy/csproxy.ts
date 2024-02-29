@@ -100,7 +100,9 @@ export class CSProxy extends Proxy {
     return CSProxy.getCompletedTx(this.baseUrl, txHash);
   }
 
-  static generateBlocks(baseUrl: string, numBlocks: number = 1) {
+  static async generateBlocks(baseUrl: string, numBlocks: number = 1) {
+    // await new Promise((r) => setTimeout(r, 5000));
+
     return Proxy.fetch(`${baseUrl}/simulator/generate-blocks/${numBlocks}`, {});
   }
 

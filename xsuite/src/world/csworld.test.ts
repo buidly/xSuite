@@ -32,46 +32,46 @@ beforeAll(async () => {
   world = await CSWorld.start({
     explorerUrl,
     verbose: true,
-    // debug: true,
+    debug: true,
   });
   wallet = await world.createWallet({
     balance: 10n ** 18n,
-    kvs: [e.kvs.Esdts([{ id: fftId, amount: 10n ** 18n }])],
+    // kvs: [e.kvs.Esdts([{ id: fftId, amount: 10n ** 18n }])],
   }); // wallet in shard 0
 
   // TODO: We generated multiple wallets until we got one in the same shard
   otherWallet = await world.createWallet();
-  otherWallet = await world.createWallet();
-  otherWallet = await world.createWallet();
-  otherWallet = await world.createWallet();
-  otherWallet = await world.createWallet();
-  otherWallet = await world.createWallet(); // wallet in shard 0
+  // otherWallet = await world.createWallet();
+  // otherWallet = await world.createWallet();
+  // otherWallet = await world.createWallet();
+  // otherWallet = await world.createWallet();
+  // otherWallet = await world.createWallet(); // wallet in shard 0
 
-  const result = await wallet.deployContract({
-    code: worldCode,
-    codeMetadata: ['payable'],
-    codeArgs: [e.U64(1)],
-    gasLimit: 10_000_000,
-  });
-  contract = result.contract;
+  // const result = await wallet.deployContract({
+  //   code: worldCode,
+  //   codeMetadata: ['payable'],
+  //   codeArgs: [e.U64(1)],
+  //   gasLimit: 10_000_000,
+  // });
+  // contract = result.contract;
 }, 60_000);
 
 beforeEach(async () => {
-  await wallet.setAccount({
-    balance: 10n ** 18n,
-    kvs: [e.kvs.Esdts([{ id: fftId, amount: 10n ** 18n }])],
-  });
-  await otherWallet.setAccount({
-    balance: 0,
-    kvs: [],
-  });
-  await contract.setAccount({
-    balance: 10n ** 18n,
-    kvs: [
-      e.kvs.Esdts([{ id: fftId, amount: 10n ** 18n }]),
-      [e.Str("n"), e.U64(2)],
-    ],
-  });
+  // await wallet.setAccount({
+  //   balance: 10n ** 18n,
+  //   kvs: [e.kvs.Esdts([{ id: fftId, amount: 10n ** 18n }])],
+  // });
+  // await otherWallet.setAccount({
+  //   balance: 0,
+  //   kvs: [],
+  // });
+  // await contract.setAccount({
+  //   balance: 10n ** 18n,
+  //   kvs: [
+  //     e.kvs.Esdts([{ id: fftId, amount: 10n ** 18n }]),
+  //     [e.Str("n"), e.U64(2)],
+  //   ],
+  // });
 });
 
 test('CSWorld.proxy.getAccountNonce on empty bech address', async () => {
@@ -252,7 +252,7 @@ test('CSWorld.query - try to change the state', async () => {
   });
 });
 
-test('CSWorld.executeTx', async () => {
+test.only('CSWorld.executeTx', async () => {
   const { tx } = await world.executeTx({
     sender: wallet,
     receiver: otherWallet,
@@ -267,7 +267,7 @@ test('CSWorld.executeTx', async () => {
   assertAccount(await otherWallet.getAccountWithKvs(), {
     balance: 10n ** 17n,
   });
-});
+}, 600_000);
 
 test('CSWorld.transfer', async () => {
   await world.transfer({
